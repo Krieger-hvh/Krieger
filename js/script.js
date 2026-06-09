@@ -1,0 +1,365 @@
+// ============================================
+// 📦 PRODUKTE - HIER PREISE & BILDER ÄNDERN!
+// ============================================
+const products = {
+    "Streaming Accounts": [
+        { id: 1, name: "Netflix Premium", price: 4.99, oldPrice: 14.99, image: "images/netflix.jpg", stock: "Auf Lager", badge: null },
+        { id: 2, name: "Disney+ Premium", price: 3.99, oldPrice: 11.99, image: "pic/disney+.jpg", stock: "Auf Lager", badge: null },
+        { id: 3, name: "Amazon Prime", price: 3.49, oldPrice: 8.99, image: "images/prime.jpg", stock: "Auf Lager", badge: "Beliebt" },
+        { id: 4, name: "Paramount+", price: 2.99, oldPrice: 7.99, image: "pic/paramount.jpg", stock: "Auf Lager", badge: null },
+        { id: 5, name: "Crunchyroll", price: 2.49, oldPrice: 6.99, image: "images/crunchyroll.jpg", stock: "Auf Lager", badge: null },
+        { id: 6, name: "HBO Max", price: 3.99, oldPrice: 9.99, image: "images/hbo.jpg", stock: "Nur noch 5", badge: null },
+        { id: 7, name: "Sky Showtime", price: 2.99, oldPrice: 7.99, image: "images/sky.jpg", stock: "Auf Lager", badge: null }
+    ],
+    "Premium Accounts": [
+        { id: 8, name: "Spotify Premium", price: 3.99, oldPrice: 9.99, image: "images/spotify.jpg", stock: "Auf Lager", badge: "Bestseller" },
+        { id: 9, name: "YouTube Premium", price: 3.49, oldPrice: 11.99, image: "images/youtube.jpg", stock: "Auf Lager", badge: null },
+        { id: 10, name: "SoundCloud Go+", price: 2.49, oldPrice: 6.99, image: "images/soundcloud.jpg", stock: "Auf Lager", badge: null },
+        { id: 11, name: "Deezer Premium", price: 2.49, oldPrice: 6.99, image: "images/deezer.jpg", stock: "Auf Lager", badge: null }
+    ],
+    "Social & Chat": [
+        { id: 12, name: "Discord Nitro", price: 4.99, oldPrice: 9.99, image: "images/discord.jpg", stock: "Auf Lager", badge: "Beliebt" },
+        { id: 13, name: "Instagram Accounts", price: 5.99, oldPrice: 14.99, image: "images/instagram.jpg", stock: "Nur noch 3", badge: null },
+        { id: 14, name: "TikTok Accounts", price: 4.99, oldPrice: 12.99, image: "images/tiktok.jpg", stock: "Auf Lager", badge: null },
+        { id: 15, name: "Twitch Accounts", price: 3.99, oldPrice: 9.99, image: "images/twitch.jpg", stock: "Auf Lager", badge: null },
+        { id: 16, name: "YouTube Accounts", price: 3.49, oldPrice: 8.99, image: "images/youtube-acc.jpg", stock: "Auf Lager", badge: null },
+        { id: 17, name: "Snapchat Accounts", price: 2.99, oldPrice: 7.99, image: "images/snapchat.jpg", stock: "Auf Lager", badge: null }
+    ],
+    "Tools & Services": [
+        { id: 18, name: "VPN Premium", price: 3.99, oldPrice: 11.99, image: "images/vpn.jpg", stock: "Auf Lager", badge: "Top" },
+        { id: 19, name: "Email Accounts", price: 2.49, oldPrice: 6.99, image: "images/email.jpg", stock: "Auf Lager", badge: null },
+        { id: 20, name: "Server Boosts", price: 1.99, oldPrice: 4.99, image: "images/boost.jpg", stock: "Auf Lager", badge: null }
+    ],
+    "Gaming Accounts": [
+        { id: 21, name: "FiveM Accounts", price: 6.99, oldPrice: 19.99, image: "images/fivem.jpg", stock: "Nur noch 2", badge: null },
+        { id: 22, name: "Steam Accounts", price: 7.99, oldPrice: 24.99, image: "images/steam.jpg", stock: "Auf Lager", badge: "Beliebt" },
+        { id: 23, name: "Epic Games", price: 5.99, oldPrice: 14.99, image: "images/epic.jpg", stock: "Auf Lager", badge: null },
+        { id: 24, name: "Rockstar Accounts", price: 6.99, oldPrice: 19.99, image: "images/rockstar.jpg", stock: "Auf Lager", badge: null },
+        { id: 25, name: "Minecraft Accounts", price: 4.99, oldPrice: 12.99, image: "images/minecraft.jpg", stock: "Auf Lager", badge: null },
+        { id: 26, name: "Valorant Accounts", price: 8.99, oldPrice: 29.99, image: "images/valorant.jpg", stock: "Nur noch 4", badge: null },
+        { id: 27, name: "Fortnite Accounts", price: 7.99, oldPrice: 24.99, image: "images/fortnite.jpg", stock: "Auf Lager", badge: "Top" }
+    ]
+};
+
+// ============================================
+//  DISCORD WEBHOOK - HIER DEINE URL EINTRAGEN!
+// ============================================
+// Anleitung: Discord Server → Kanal → Bearbeiten → Integrationen → Webhooks → Neuer Webhook → URL kopieren
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1513950453140815984/-Ev1AQvMw4SrWDfCoBmHCo9y4SQ1IC5N1sM12LhsQQ7FfwymK2RyDtyq4r9I3kdOtzec";
+
+// ============================================
+// 🛒 WARENKORB STATE
+// ============================================
+let cart = [];
+
+// ============================================
+//  PRODUKTE RENDERN
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    renderAllProducts();
+    updateCartUI();
+});
+
+function renderAllProducts() {
+    const container = document.getElementById('products-container');
+    container.innerHTML = '';
+
+    for (const [category, categoryProducts] of Object.entries(products)) {
+        const categorySection = document.createElement('div');
+        categorySection.className = 'category-section';
+        
+        const categoryTitle = document.createElement('div');
+        categoryTitle.className = 'flex items-center gap-3 mb-8';
+        categoryTitle.innerHTML = `
+            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-500/50 to-transparent"></div>
+            <h3 class="text-2xl font-bold text-white px-4">${category}</h3>
+            <div class="h-px flex-1 bg-gradient-to-r from-transparent via-brand-500/50 to-transparent"></div>
+        `;
+        
+        categorySection.appendChild(categoryTitle);
+
+        const productGrid = document.createElement('div');
+        productGrid.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6';
+
+        categoryProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            productGrid.appendChild(productCard);
+        });
+
+        categorySection.appendChild(productGrid);
+        container.appendChild(categorySection);
+    }
+}
+
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'glass rounded-2xl p-6 hover:border-brand-500/50 transition-all duration-300 group relative overflow-hidden';
+    
+    const badgeHTML = product.badge ? `
+        <div class="absolute top-4 right-4 bg-brand-500 text-white text-xs font-bold px-2 py-1 rounded-full z-10 shadow-lg shadow-brand-500/20">
+            ${product.badge.toUpperCase()}
+        </div>
+    ` : '';
+
+    const stockColor = product.stock.includes('Nur noch') ? 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' : 'text-green-400 bg-green-500/10 border-green-500/20';
+
+    card.innerHTML = `
+        ${badgeHTML}
+        <div class="flex flex-col h-full">
+            <div class="mb-4 overflow-hidden rounded-xl">
+                <img src="${product.image}" alt="${product.name}" 
+                     class="w-full h-40 object-cover bg-slate-800 group-hover:scale-110 transition-transform duration-500"
+                     onerror="this.src='https://placehold.co/400x300/1e293b/6366f1?text=${encodeURIComponent(product.name)}'">
+            </div>
+            
+            <div class="flex justify-between items-start mb-3">
+                <span class="${stockColor} text-xs font-bold px-2 py-1 rounded-full border">
+                    ${product.stock}
+                </span>
+            </div>
+            
+            <h4 class="text-lg font-bold text-white mb-2">${product.name}</h4>
+            <p class="text-slate-400 text-sm mb-4 flex-grow">Premium Account mit voller Garantie und Support.</p>
+            
+            <div class="flex items-end justify-between mt-auto pt-4 border-t border-white/5">
+                <div>
+                    <span class="text-slate-500 text-sm line-through">${product.oldPrice.toFixed(2)} €</span>
+                    <div class="text-2xl font-bold text-white">${product.price.toFixed(2)} €</div>
+                </div>
+                <button onclick="addToCart(${product.id})" 
+                        class="bg-white text-slate-900 hover:bg-brand-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg shadow-white/5">
+                    Kaufen
+                </button>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+// ============================================
+// 🛒 WARENKORB FUNKTIONEN
+// ============================================
+window.addToCart = function(productId) {
+    let product = null;
+    for (const categoryProducts of Object.values(products)) {
+        product = categoryProducts.find(p => p.id === productId);
+        if (product) break;
+    }
+
+    if (!product) return;
+
+    const existingItem = cart.find(item => item.id === productId);
+    
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ ...product, quantity: 1 });
+    }
+
+    updateCartUI();
+    showToast(`${product.name} wurde hinzugefügt.`);
+};
+
+window.removeFromCart = function(productId) {
+    cart = cart.filter(item => item.id !== productId);
+    updateCartUI();
+};
+
+window.changeQuantity = function(productId, delta) {
+    const item = cart.find(item => item.id === productId);
+    if (!item) return;
+
+    item.quantity += delta;
+    
+    if (item.quantity <= 0) {
+        removeFromCart(productId);
+    } else {
+        updateCartUI();
+    }
+};
+
+function updateCartUI() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartEmpty = document.getElementById('cart-empty');
+    const cartFooter = document.getElementById('cart-footer');
+    const cartCountBadge = document.getElementById('cart-count');
+    const cartItemsCount = document.getElementById('cart-items-count');
+    const cartTotal = document.getElementById('cart-total');
+
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    cartCountBadge.innerText = totalItems;
+    if (totalItems > 0) {
+        cartCountBadge.classList.remove('scale-0');
+    } else {
+        cartCountBadge.classList.add('scale-0');
+    }
+    cartItemsCount.innerText = totalItems;
+
+    if (cart.length === 0) {
+        cartItemsContainer.classList.add('hidden');
+        cartFooter.classList.add('hidden');
+        cartEmpty.classList.remove('hidden');
+        cartTotal.innerText = '0,00 €';
+        return;
+    }
+
+    cartItemsContainer.classList.remove('hidden');
+    cartFooter.classList.remove('hidden');
+    cartEmpty.classList.add('hidden');
+
+    cartItemsContainer.innerHTML = cart.map(item => `
+        <div class="cart-item-enter glass rounded-xl p-4 flex gap-4 items-center">
+            <img src="${item.image}" alt="${item.name}" 
+                 class="w-16 h-16 rounded-lg object-cover bg-slate-800 flex-shrink-0"
+                 onerror="this.src='https://placehold.co/100x100/1e293b/6366f1?text=${encodeURIComponent(item.name.substring(0,3))}'">
+            
+            <div class="flex-1 min-w-0">
+                <h4 class="text-sm font-semibold text-white truncate">${item.name}</h4>
+                <div class="text-brand-accent font-bold text-sm mt-1">${item.price.toFixed(2)} €</div>
+                
+                <div class="flex items-center gap-2 mt-2">
+                    <button onclick="changeQuantity(${item.id}, -1)" 
+                            class="w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold">−</button>
+                    <span class="text-sm text-white font-semibold w-6 text-center">${item.quantity}</span>
+                    <button onclick="changeQuantity(${item.id}, 1)" 
+                            class="w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold">+</button>
+                </div>
+            </div>
+
+            <button onclick="removeFromCart(${item.id})" 
+                    class="remove-btn p-2 rounded-lg text-slate-500 flex-shrink-0" title="Entfernen">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </button>
+        </div>
+    `).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    cartTotal.innerText = total.toFixed(2).replace('.', ',') + ' €';
+}
+
+window.toggleCart = function() {
+    const panel = document.getElementById('cart-panel');
+    const overlay = document.getElementById('cart-overlay');
+    const isOpen = !panel.classList.contains('translate-x-full');
+
+    if (isOpen) {
+        panel.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+    } else {
+        panel.classList.remove('translate-x-full');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'hidden';
+    }
+};
+
+// ============================================
+// 🔐 CHECKOUT - CODE GENERIEREN & DISCORD NOTIFY
+// ============================================
+window.checkout = function() {
+    if (cart.length === 0) return;
+
+    // Zufälligen Code generieren (Format: XXXX-XXXX-XXXX)
+    const code = generateRandomCode();
+    
+    // Gesamtpreis berechnen
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // Checkout-Daten für die nächste Seite speichern
+    const checkoutData = {
+        code: code,
+        total: total,
+        items: cart,
+        timestamp: new Date().toISOString()
+    };
+    
+    localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
+
+    // Discord-Benachrichtigung senden
+    sendDiscordNotification(checkoutData);
+
+    // Zur Checkout-Seite weiterleiten
+    window.location.href = 'checkout.html';
+};
+
+// Zufälligen Code generieren
+function generateRandomCode() {
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Ohne I, O, 0, 1 (Verwechslungsgefahr)
+    let code = '';
+    for (let i = 0; i < 12; i++) {
+        if (i > 0 && i % 4 === 0) code += '-';
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return code;
+}
+
+// Discord-Benachrichtigung senden
+async function sendDiscordNotification(checkoutData) {
+    if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL === "HIER_DEINE_DISCORD_WEBHOOK_URL_EINFÜGEN") {
+        console.warn('Discord Webhook URL nicht konfiguriert!');
+        return;
+    }
+
+    // Warenkorb als formatierte Liste
+    const itemsList = checkoutData.items.map(item => 
+        `• **${item.name}** x${item.quantity} = ${(item.price * item.quantity).toFixed(2)} €`
+    ).join('\n');
+
+    const embed = {
+        title: " Neue Bestellung eingegangen!",
+        color: 0x6366f1, // Brand-Farbe (Indigo)
+        fields: [
+            {
+                name: " Bestell-Code",
+                value: `\`${checkoutData.code}\``,
+                inline: true
+            },
+            {
+                name: "💰 Gesamtpreis",
+                value: `**${checkoutData.total.toFixed(2).replace('.', ',')} €**`,
+                inline: true
+            },
+            {
+                name: "📦 Artikel",
+                value: itemsList
+            },
+            {
+                name: "🕐 Zeitpunkt",
+                value: new Date(checkoutData.timestamp).toLocaleString('de-DE')
+            }
+        ],
+        footer: {
+            text: "DigitalVault Shop"
+        },
+        timestamp: checkoutData.timestamp
+    };
+
+    try {
+        await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                content: "🔔 **Neue Bestellung!** Bitte Discord-Ticket öffnen und Code einlösen.",
+                embeds: [embed]
+            })
+        });
+        console.log('Discord-Benachrichtigung gesendet!');
+    } catch (error) {
+        console.error('Fehler beim Senden der Discord-Nachricht:', error);
+    }
+}
+
+// Toast Benachrichtigung
+function showToast(message) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-message').innerText = message;
+    toast.classList.remove('translate-y-24');
+    
+    setTimeout(() => {
+        toast.classList.add('translate-y-24');
+    }, 2500);
+}

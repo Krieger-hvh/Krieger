@@ -1,0 +1,71 @@
+/* Checkout-spezifische Styles */
+
+.success-pulse {
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 20px rgba(34, 197, 94, 0);
+    }
+}
+
+/* Code-Box Styling */
+#checkout-code {
+    background: linear-gradient(135deg, #818cf8 0%, #06b6d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.1em;
+}
+
+/* Copy Button Animation */
+#copy-btn:active {
+    transform: scale(0.98);
+}
+
+/* Toast Animation */
+.toast-show {
+    transform: translateY(0) !important;
+}
+
+/* Fade-In Animation für Container */
+body > .relative {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bestell-Items Animation */
+.order-item {
+    animation: slideIn 0.3s ease-out backwards;
+}
+
+.order-item:nth-child(1) { animation-delay: 0.1s; }
+.order-item:nth-child(2) { animation-delay: 0.2s; }
+.order-item:nth-child(3) { animation-delay: 0.3s; }
+.order-item:nth-child(4) { animation-delay: 0.4s; }
+.order-item:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

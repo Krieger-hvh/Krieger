@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigitalVault | Premium Accounts</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Eigenes CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind Konfiguration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 500: '#6366f1', 600: '#4f46e5', accent: '#06b6d4' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-950 text-slate-200 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 glass border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-brand-500 to-brand-accent rounded-lg flex items-center justify-center font-bold text-white">D</div>
+                    <span class="font-bold text-xl tracking-tight text-white">DigitalVault</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#produkte" class="hover:text-brand-accent transition-colors">Produkte</a>
+                    <a href="#vorteile" class="hover:text-brand-accent transition-colors">Vorteile</a>
+                    <a href="#faq" class="hover:text-brand-accent transition-colors">FAQ</a>
+                </div>
+                <!-- Warenkorb Button -->
+                <button class="relative p-2 hover:bg-white/5 rounded-full transition-colors" onclick="toggleCart()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center transform scale-0 transition-transform duration-200">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full z-0 pointer-events-none">
+            <div class="absolute top-20 left-1/4 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-1/4 w-96 h-96 bg-brand-accent/20 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-sm text-brand-accent mb-6 border border-brand-accent/20">
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-accent"></span>
+                </span>
+                Über 30+ Premium Accounts verfügbar
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+                Premium Accounts.<br>
+                <span class="gradient-text">Sofort. Sicher. Garantiert.</span>
+            </h1>
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-slate-400 mb-10">
+                Erhalte sofortigen Zugriff auf hochwertige digitale Accounts. 
+                Vollständige Lebenszeitgarantie, 24/7 Support und verschlüsselte Lieferung.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#produkte" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-xl transition-all glow flex items-center justify-center gap-2">
+                    Jetzt Accounts entdecken
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <a href="#wie-es-funktioniert" class="px-8 py-4 glass hover:bg-white/5 text-white font-semibold rounded-xl transition-all border border-white/10">
+                    Wie es funktioniert
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Badges -->
+    <section id="vorteile" class="py-12 border-y border-white/5 bg-slate-900/50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-brand-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Sofortige Lieferung</h3>
+                    <p class="text-slate-400 text-sm">Deine Zugangsdaten landen sekunden nach dem Kauf verschlüsselt in deinem E-Mail-Postfach.</p>
+                </div>
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-brand-accent/10 rounded-xl flex items-center justify-center mx-auto mb-4 text-brand-accent">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-2">Lebenszeit-Garantie</h3>
+                    <p class="text-slate-400 text-sm">Sollte ein Account nicht funktionieren, erhältst du innerhalb von 24h kostenlosen Ersatz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ✅ NEUE SEKTION: Wie es funktioniert -->
+    <section id="wie-es-funktioniert" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <div class="inline-block px-3 py-1 rounded-full glass text-sm text-brand-accent mb-4 border border-brand-accent/20">
+                    In 3 einfachen Schritten
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">So funktioniert's</h2>
+                <p class="text-slate-400 max-w-2xl mx-auto">
+                    <!-- ✏️ HIER KANNST DU DEN TEXT ÄNDERN -->
+                    Von der Auswahl bis zur Nutzung deines Premium-Accounts vergehen nur wenige Minuten. Kein Stress, keine Wartezeit.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <!-- Verbindungslinie zwischen den Schritten (nur Desktop) -->
+                <div class="hidden md:block absolute top-24 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-transparent via-brand-500/30 to-transparent"></div>
+
+                <!-- Schritt 1 -->
+                <div class="glass rounded-2xl p-8 text-center relative group hover:border-brand-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg shadow-brand-500/30 group-hover:scale-110 transition-transform">
+                        1
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Account auswählen</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <!-- ✏️ HIER KANNST DU DEN TEXT ÄNDERN -->
+                        Durchstöbere unser Sortiment und wähle den gewünschten Premium-Account aus einer unserer Kategorien aus.
+                    </p>
+                </div>
+
+                <!-- Schritt 2 -->
+                <div class="glass rounded-2xl p-8 text-center relative group hover:border-brand-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg shadow-brand-500/30 group-hover:scale-110 transition-transform">
+                        2
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Sicher bezahlen</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <!-- ✏️ HIER KANNST DU DEN TEXT ÄNDERN -->
+                        Nachdem du alle gewünschten Arrikel in den Warenkorb gelegt hast klickst du auf weiter. Du erhälst eine Lange generierten Code, dieser muss in das geöffnete Ticket reingeschickt werden. Bezahlt wird dann mit Guthaben Karten im Ticket indem man den Code reinsendet
+                    </p>
+                </div>
+
+                <!-- Schritt 3 -->
+                <div class="glass rounded-2xl p-8 text-center relative group hover:border-brand-500/50 transition-all duration-300">
+                    <div class="w-16 h-16 bg-gradient-to-br from-brand-500 to-brand-accent rounded-2xl flex items-center justify-center mx-auto mb-6 text-white text-2xl font-bold shadow-lg shadow-brand-500/30 group-hover:scale-110 transition-transform">
+                        3
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Zugangsdaten erhalten</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <!-- ✏️ HIER KANNST DU DEN TEXT ÄNDERN -->
+                        Nachdem geprüft wurde das die Guthabenkarte gültig ist werden die die Zugangsdaten ins Ticket gesendet.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Zusätzlicher Info-Text unter den Schritten -->
+            <div class="mt-12 glass rounded-2xl p-8 max-w-3xl mx-auto text-center border border-brand-500/20">
+                <div class="flex items-center justify-center gap-2 mb-3 text-brand-accent">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="font-semibold">Gut zu wissen</span>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    <!-- ✏️ HIER KANNST DU DEN TEXT ÄNDERN -->
+                    Alle Accounts werden manuell geprüft und kommen mit voller Lebenszeit-Garantie. 
+                    Bei Problemen steht dir unser Support rund um die Uhr zur Verfügung.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="produkte" class="py-24 relative bg-slate-900/30 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Alle Produkte</h2>
+                <p class="text-slate-400">Wähle aus über 30+ Premium Accounts</p>
+            </div>
+
+            <div id="products-container" class="space-y-16">
+                <!-- Wird durch JS gefüllt -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 bg-slate-900/30 border-t border-white/5">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Häufig gestellte Fragen</h2>
+            <div class="space-y-4">
+                <details class="group glass rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-white font-semibold">
+                        <span>Wie erhalte ich meine Zugangsdaten?</span>
+                        <span class="relative size-5 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0 transition duration-300 group-open:-rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 leading-relaxed text-slate-400">
+                        Direkt nach erfolgreicher Zahlung erhältst du eine E-Mail mit deinen verschlüsselten Zugangsdaten und einer kurzen Anleitung zur Einrichtung.
+                    </p>
+                </details>
+                <details class="group glass rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                    <summary class="flex cursor-pointer items-center justify-between gap-1.5 text-white font-semibold">
+                        <span>Was passiert, wenn der Account nicht funktioniert?</span>
+                        <span class="relative size-5 shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="size-5 shrink-0 transition duration-300 group-open:-rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </span>
+                    </summary>
+                    <p class="mt-4 leading-relaxed text-slate-400">
+                        Wir bieten eine Lebenszeit-Garantie. Sollte es Probleme geben, kontaktiere einfach unseren 24/7 Support und wir ersetzen den Account umgehend.
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-slate-950 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 bg-gradient-to-br from-brand-500 to-brand-accent rounded flex items-center justify-center font-bold text-white text-xs">D</div>
+                <span class="font-bold text-lg text-white">DigitalVault</span>
+            </div>
+            <div class="text-slate-500 text-sm">
+                &copy; 2026 DigitalVault. Alle Rechte vorbehalten. | <a href="#" class="hover:text-white transition-colors">Impressum</a> | <a href="#" class="hover:text-white transition-colors">Datenschutz</a> | <a href="#" class="hover:text-white transition-colors">AGB</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================ -->
+    <!-- 🛒 WARENKORB OVERLAY & PANEL -->
+    <!-- ============================================ -->
+    
+    <!-- Dunkler Hintergrund-Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300" onclick="toggleCart()"></div>
+
+    <!-- Warenkorb Slide-In Panel -->
+    <div id="cart-panel" class="fixed top-0 right-0 h-full w-full max-w-md bg-slate-900/95 backdrop-blur-xl border-l border-white/10 z-50 transform translate-x-full transition-transform duration-300 ease-out flex flex-col">
+        
+        <!-- Warenkorb Header -->
+        <div class="flex items-center justify-between p-6 border-b border-white/10">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand-500/20 rounded-xl flex items-center justify-center text-brand-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Dein Warenkorb</h2>
+                    <p class="text-xs text-slate-400"><span id="cart-items-count">0</span> Artikel</p>
+                </div>
+            </div>
+            <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-lg transition-colors text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Warenkorb Inhalt (Produktliste) -->
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Wird durch JS gefüllt -->
+        </div>
+
+        <!-- Leerer Warenkorb State -->
+        <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center p-6 text-center hidden">
+            <div class="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-white mb-2">Dein Warenkorb ist leer</h3>
+            <p class="text-slate-400 text-sm mb-6">Füge Produkte hinzu, um fortzufahren.</p>
+            <button onclick="toggleCart()" class="px-6 py-2 bg-brand-600 hover:bg-brand-500 text-white font-semibold rounded-lg transition-colors">
+                Zum Shop
+            </button>
+        </div>
+
+        <!-- Warenkorb Footer (Gesamtpreis & Checkout) -->
+        <div id="cart-footer" class="border-t border-white/10 p-6 bg-slate-900/50">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-slate-400">Gesamtsumme</span>
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-white" id="cart-total">0,00 €</div>
+                    <div class="text-xs text-slate-500">inkl. MwSt.</div>
+                </div>
+            </div>
+            <button onclick="checkout()" class="w-full py-4 bg-gradient-to-r from-brand-600 to-brand-accent hover:from-brand-500 hover:to-brand-500 text-white font-bold rounded-xl transition-all shadow-lg shadow-brand-500/30 flex items-center justify-center gap-2">
+                Zur Kasse
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            <p class="text-center text-xs text-slate-500 mt-3">
+                Sichere Zahlung mit SSL-Verschlüsselung
+            </p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-slate-800 border border-brand-500/30 text-white px-6 py-4 rounded-xl shadow-2xl transform translate-y-24 transition-transform duration-300 flex items-center gap-3 z-[60]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <div>
+            <h4 class="font-semibold text-sm">Erfolgreich hinzugefügt</h4>
+            <p class="text-xs text-slate-400" id="toast-message">Produkt wurde zum Warenkorb hinzugefügt.</p>
+        </div>
+    </div>
+
+    <!-- Eigenes JavaScript -->
+    <script src="js/script.js"></script>
+
+
+
+
+    <!-- Test-Button für Discord Webhook -->
+<div style="position: fixed; bottom: 20px; left: 20px; z-index: 9999;">
+    <button onclick="testDiscordWebhook()" style="background: #5865F2; color: white; padding: 12px 24px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+        🧪 Discord Webhook Testen
+    </button>
+</div>
+
+<script>
+async function testDiscordWebhook() {
+    console.log(' Teste Discord Webhook...');
+    
+    // Prüfen ob URL eingetragen ist
+    if (typeof DISCORD_WEBHOOK_URL === 'undefined' || 
+        !DISCORD_WEBHOOK_URL || 
+        DISCORD_WEBHOOK_URL === "HIER_DEINE_DISCORD_WEBHOOK_URL_EINFÜGEN") {
+        
+        alert('❌ Discord Webhook URL nicht eingetragen!\n\nBitte öffne js/script.js und trage deine Webhook-URL ein.');
+        return;
+    }
+    
+    // Test-Nachricht senden
+    const testMessage = {
+        content: "🧪 **Webhook Test erfolgreich!**",
+        embeds: [{
+            title: "✅ Test-Nachricht",
+            description: "Wenn du diese Nachricht siehst, funktioniert dein Discord Webhook!",
+            color: 0x00ff00,
+            fields: [
+                {
+                    name: "🕐 Zeitstempel",
+                    value: new Date().toLocaleString('de-DE'),
+                    inline: true
+                },
+                {
+                    name: " URL Status",
+                    value: "✅ Verbunden",
+                    inline: true
+                }
+            ],
+            footer: {
+                text: "DigitalVault Shop Test"
+            }
+        }]
+    };
+    
+    try {
+        console.log('Sende an:', DISCORD_WEBHOOK_URL);
+        
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(testMessage)
+        });
+        
+        if (response.ok) {
+            console.log('✅ Erfolg! Status:', response.status);
+            alert('✅ Erfolgreich! Schau in deinen Discord-Kanal.');
+        } else {
+            console.error('❌ Fehler:', response.status, response.statusText);
+            const errorText = await response.text();
+            console.error('Fehler-Details:', errorText);
+            alert('❌ Fehler ' + response.status + ': ' + response.statusText + '\n\nSiehe Console (F12) für Details.');
+        }
+    } catch (error) {
+        console.error('❌ Netzwerk-Fehler:', error);
+        alert('❌ Netzwerk-Fehler: ' + error.message + '\n\nSiehe Console (F12) für Details.');
+    }
+}
+</script>
+</body>
+</html>
