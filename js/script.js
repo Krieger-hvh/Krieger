@@ -279,9 +279,35 @@ window.closeVariantModal = function() {
     document.body.style.overflow = '';
 };
 
-/// ============================================
-// 🛒 WARENKORB FUNKTIONEN (KORRIGIERT)
 // ============================================
+// 🛒 WARENKORB FUNKTIONEN (KOMPLETT)
+// ============================================
+
+// Warenkorb öffnen/schließen
+window.toggleCart = function() {
+    console.log('Warenkorb toggle');
+    const panel = document.getElementById('cart-panel');
+    const overlay = document.getElementById('cart-overlay');
+    
+    if (!panel || !overlay) {
+        console.error('Warenkorb-Elemente nicht gefunden!');
+        return;
+    }
+    
+    const isOpen = !panel.classList.contains('translate-x-full');
+
+    if (isOpen) {
+        // Schließen
+        panel.classList.add('translate-x-full');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+    } else {
+        // Öffnen
+        panel.classList.remove('translate-x-full');
+        overlay.classList.remove('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = 'hidden';
+    }
+};
 
 // Produkt zum Warenkorb hinzufügen
 window.addToCart = function(productId) {
@@ -373,7 +399,6 @@ function updateCartUI() {
 
     // Warenkorb-Items rendern
     cartItemsContainer.innerHTML = cart.map(item => {
-        // Stelle sicher dass ID ein String ist für onclick
         const itemId = String(item.id);
         
         return `
@@ -412,7 +437,6 @@ function updateCartUI() {
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     if (cartTotal) cartTotal.innerText = total.toFixed(2).replace('.', ',') + ' €';
 }
-
 // ============================================
 // 🔐 CHECKOUT - CODE GENERIEREN & DISCORD NOTIFY
 // ============================================
