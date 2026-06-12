@@ -1,5 +1,5 @@
 // ============================================
-// 📦 PRODUKTE - HIER PREISE & BILDER ÄNDERN!
+// 📦 PRODUKTE
 // ============================================
 const products = {
     "Streaming Accounts": [
@@ -19,7 +19,7 @@ const products = {
         { id: 12, name: "Discord Nitro", price: 4.99, image: "images/discord.jpg", stock: "Auf Lager", badge: "Beliebt" },
         { id: 13, name: "Instagram Accounts", price: 5.99, image: "images/instagram.jpg", stock: "Nur noch 3", badge: null },
         { id: 14, name: "TikTok Accounts", price: 4.99, image: "images/tiktok.jpg", stock: "Auf Lager", badge: null },
-        { id: 15, name: "Twitch Accounts", price: 3.99, image: "images/twitch.jpg", stock: "Auf Lager", badge: null },
+        { id: 15, name: "Twitch Accounts", price: 3.99, image: "images/twitch.jpg", stock: "Auf Lager", badge: null }
     ],
     "Tools & Services": [
         { id: 18, name: "NordVPN Lifetime", price: 7.99, image: "images/nordvpn.jpg", stock: "Auf Lager", badge: "Top" },
@@ -99,7 +99,7 @@ const products = {
 };
 
 // ============================================
-// 🔐 DISCORD WEBHOOK - HIER DEINE URL EINTRAGEN!
+// 🔐 DISCORD WEBHOOK
 // ============================================
 const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1513950453140815984/-Ev1AQvMw4SrWDfCoBmHCo9y4SQ1IC5N1sM12LhsQQ7FfwymK2RyDtyq4r9I3kdOtzec";
 
@@ -109,13 +109,17 @@ const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/151395045314081598
 let cart = [];
 
 // ============================================
-// 🎨 PRODUKTE RENDERN (NUR EINMAL!)
+// 🎨 INITIALISIERUNG
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('✅ Seite geladen');
     renderAllProducts();
     updateCartUI();
 });
 
+// ============================================
+// 📦 PRODUKTE RENDERN
+// ============================================
 function renderAllProducts() {
     const container = document.getElementById('products-container');
     if (!container) return;
@@ -163,7 +167,6 @@ function createProductCard(product) {
 
     const hasVariants = product.variants && product.variants.length > 0;
     const buttonText = hasVariants ? 'Auswählen' : 'Kaufen';
-    const buttonAction = hasVariants ? `openVariantModal(${product.id})` : `addToCart(${product.id})`;
 
     card.innerHTML = `
         ${badgeHTML}
@@ -188,21 +191,35 @@ function createProductCard(product) {
                     ${hasVariants ? `<span class="text-slate-400 text-sm">ab</span>` : ''}
                     <div class="text-2xl font-bold text-white">${product.price.toFixed(2)} €</div>
                 </div>
-                <button onclick="${buttonAction}" 
-                        class="bg-white text-slate-900 hover:bg-brand-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg shadow-white/5 cursor-pointer">
+                <button class="product-btn bg-white text-slate-900 hover:bg-brand-500 hover:text-white px-4 py-2 rounded-lg font-semibold transition-all flex items-center gap-2 shadow-lg shadow-white/5 cursor-pointer"
+                        data-product-id="${product.id}"
+                        data-has-variants="${hasVariants}">
                     ${buttonText}
                 </button>
             </div>
         </div>
     `;
 
+    // Event-Listener für Produkt-Button
+    const button = card.querySelector('.product-btn');
+    button.addEventListener('click', function() {
+        const productId = parseInt(this.dataset.productId);
+        const hasVariants = this.dataset.hasVariants === 'true';
+        
+        if (hasVariants) {
+            openVariantModal(productId);
+        } else {
+            addToCart(productId);
+        }
+    });
+
     return card;
 }
 
 // ============================================
-// 🎯 VARIANTEN MODAL FUNKTIONEN
+// 🎯 VARIANTEN MODAL
 // ============================================
-window.openVariantModal = function(productId) {
+function openVariantModal(productId) {
     let product = null;
     for (const categoryProducts of Object.values(products)) {
         product = categoryProducts.find(p => p.id === productId);
@@ -219,9 +236,13 @@ window.openVariantModal = function(productId) {
 
     modalTitle.innerText = product.name;
     
-    modalVariants.innerHTML = product.variants.map((variant, index) => `
-        <div onclick="selectVariant(${product.id}, ${index})" 
-             class="variant-option glass rounded-xl p-4 cursor-pointer border-2 border-transparent hover:border-brand-500/50 transition-all group">
+    modalVariants.innerHTML = '';
+    
+    product.variants.forEach((variant, index) => {
+        const variantDiv = document.createElement('div');
+        variantDiv.className = 'variant-option glass rounded-xl p-4 cursor-pointer border-2 border-transparent hover:border-brand-500/50 transition-all group';
+        
+        variantDiv.innerHTML = `
             <div class="flex justify-between items-start mb-2">
                 <h4 class="text-white font-bold group-hover:text-brand-accent transition-colors">${variant.name}</h4>
                 <span class="text-brand-accent font-bold text-lg">${variant.price.toFixed(2)} €</span>
@@ -232,17 +253,23 @@ window.openVariantModal = function(productId) {
                     <span class="text-xs bg-green-500/10 text-green-400 px-2 py-1 rounded border border-green-500/20">✓ ${feature}</span>
                 `).join('') : ''}
             </div>
-        </div>
-    `).join('');
+        `;
+        
+        variantDiv.addEventListener('click', () => {
+            selectVariant(productId, index);
+        });
+        
+        modalVariants.appendChild(variantDiv);
+    });
 
     modal.classList.remove('hidden');
     setTimeout(() => {
         modal.classList.remove('opacity-0', 'pointer-events-none');
     }, 10);
     document.body.style.overflow = 'hidden';
-};
+}
 
-window.selectVariant = function(productId, variantIndex) {
+function selectVariant(productId, variantIndex) {
     let product = null;
     for (const categoryProducts of Object.values(products)) {
         product = categoryProducts.find(p => p.id === productId);
@@ -252,9 +279,10 @@ window.selectVariant = function(productId, variantIndex) {
     if (!product || !product.variants) return;
 
     const selectedVariant = product.variants[variantIndex];
+    const cartId = `variant_${productId}_${variantIndex}`;
     
     cart.push({
-        id: product.id + '_' + variantIndex,
+        id: cartId,
         name: `${product.name} - ${selectedVariant.name}`,
         price: selectedVariant.price,
         image: product.image,
@@ -266,9 +294,9 @@ window.selectVariant = function(productId, variantIndex) {
     updateCartUI();
     showToast(`${product.name} (${selectedVariant.name}) wurde hinzugefügt.`);
     closeVariantModal();
-};
+}
 
-window.closeVariantModal = function() {
+function closeVariantModal() {
     const modal = document.getElementById('variant-modal');
     if (!modal) return;
     
@@ -277,15 +305,14 @@ window.closeVariantModal = function() {
         modal.classList.add('hidden');
     }, 300);
     document.body.style.overflow = '';
-};
+}
 
 // ============================================
-// 🛒 WARENKORB FUNKTIONEN (KOMPLETT)
+// 🛒 WARENKORB FUNKTIONEN
 // ============================================
 
-// Warenkorb öffnen/schließen
-window.toggleCart = function() {
-    console.log('Warenkorb toggle');
+function toggleCart() {
+    console.log('🛒 Warenkorb toggle');
     const panel = document.getElementById('cart-panel');
     const overlay = document.getElementById('cart-overlay');
     
@@ -297,21 +324,18 @@ window.toggleCart = function() {
     const isOpen = !panel.classList.contains('translate-x-full');
 
     if (isOpen) {
-        // Schließen
         panel.classList.add('translate-x-full');
         overlay.classList.add('opacity-0', 'pointer-events-none');
         document.body.style.overflow = '';
     } else {
-        // Öffnen
         panel.classList.remove('translate-x-full');
         overlay.classList.remove('opacity-0', 'pointer-events-none');
         document.body.style.overflow = 'hidden';
     }
-};
+}
 
-// Produkt zum Warenkorb hinzufügen
-window.addToCart = function(productId) {
-    console.log('Zur Warenkorb:', productId);
+function addToCart(productId) {
+    console.log('➕ Zum Warenkorb:', productId);
     let product = null;
     for (const categoryProducts of Object.values(products)) {
         product = categoryProducts.find(p => p.id === productId);
@@ -328,23 +352,28 @@ window.addToCart = function(productId) {
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ 
+            id: productId,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+            stock: product.stock,
+            quantity: 1
+        });
     }
 
     updateCartUI();
     showToast(`${product.name} wurde hinzugefügt.`);
-};
+}
 
-// Produkt aus Warenkorb entfernen
-window.removeFromCart = function(itemId) {
-    console.log('Entferne:', itemId);
+function removeFromCart(itemId) {
+    console.log('🗑️ Entferne:', itemId);
     cart = cart.filter(item => item.id !== itemId);
     updateCartUI();
-};
+}
 
-// Menge ändern
-window.changeQuantity = function(itemId, delta) {
-    console.log('Menge ändern:', itemId, delta);
+function changeQuantity(itemId, delta) {
+    console.log('🔢 Menge ändern:', itemId, delta);
     const item = cart.find(item => item.id === itemId);
     if (!item) {
         console.error('Item nicht gefunden:', itemId);
@@ -358,9 +387,8 @@ window.changeQuantity = function(itemId, delta) {
     } else {
         updateCartUI();
     }
-};
+}
 
-// Warenkorb UI aktualisieren
 function updateCartUI() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartEmpty = document.getElementById('cart-empty');
@@ -369,10 +397,7 @@ function updateCartUI() {
     const cartItemsCount = document.getElementById('cart-items-count');
     const cartTotal = document.getElementById('cart-total');
 
-    if (!cartItemsContainer || !cartCountBadge) {
-        console.error('Warenkorb-Elemente nicht gefunden!');
-        return;
-    }
+    if (!cartItemsContainer || !cartCountBadge) return;
 
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     
@@ -398,11 +423,14 @@ function updateCartUI() {
     if (cartEmpty) cartEmpty.classList.add('hidden');
 
     // Warenkorb-Items rendern
-    cartItemsContainer.innerHTML = cart.map(item => {
-        const itemId = String(item.id);
+    cartItemsContainer.innerHTML = '';
+    
+    cart.forEach(item => {
+        const cartItemDiv = document.createElement('div');
+        cartItemDiv.className = 'cart-item-enter glass rounded-xl p-4 flex gap-4 items-center';
+        cartItemDiv.dataset.itemId = item.id;
         
-        return `
-        <div class="cart-item-enter glass rounded-xl p-4 flex gap-4 items-center">
+        cartItemDiv.innerHTML = `
             <img src="${item.image}" alt="${item.name}" 
                  class="w-16 h-16 rounded-lg object-cover bg-slate-800 flex-shrink-0"
                  onerror="this.src='https://placehold.co/100x100/1e293b/6366f1?text=${encodeURIComponent(item.name.substring(0,3))}'">
@@ -412,37 +440,75 @@ function updateCartUI() {
                 <div class="text-brand-accent font-bold text-sm mt-1">${item.price.toFixed(2)} €</div>
                 
                 <div class="flex items-center gap-2 mt-2">
-                    <button onclick="window.changeQuantity('${itemId}', -1)" 
-                            class="w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold cursor-pointer">
-                        −
-                    </button>
-                    <span class="text-sm text-white font-semibold w-6 text-center">${item.quantity}</span>
-                    <button onclick="window.changeQuantity('${itemId}', 1)" 
-                            class="w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold cursor-pointer">
-                        +
-                    </button>
+                    <button class="qty-minus w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold cursor-pointer">−</button>
+                    <span class="qty-display text-sm text-white font-semibold w-6 text-center">${item.quantity}</span>
+                    <button class="qty-plus w-6 h-6 rounded bg-white/5 hover:bg-white/10 text-white flex items-center justify-center transition-colors text-sm font-bold cursor-pointer">+</button>
                 </div>
             </div>
 
-            <button onclick="window.removeFromCart('${itemId}')" 
-                    class="remove-btn p-2 rounded-lg text-slate-500 hover:text-red-400 flex-shrink-0 cursor-pointer transition-colors" 
-                    title="Entfernen">
+            <button class="remove-btn p-2 rounded-lg text-slate-500 hover:text-red-400 flex-shrink-0 cursor-pointer transition-colors" title="Entfernen">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
             </button>
-        </div>
-    `}).join('');
-
+        `;
+        
+        cartItemsContainer.appendChild(cartItemDiv);
+    });
+    
+    // Event-Listener für Warenkorb-Buttons
+    attachCartEventListeners();
+    
     const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     if (cartTotal) cartTotal.innerText = total.toFixed(2).replace('.', ',') + ' €';
 }
+
+function attachCartEventListeners() {
+    const cartItemsContainer = document.getElementById('cart-items');
+    if (!cartItemsContainer) return;
+    
+    // Minus Buttons
+    cartItemsContainer.querySelectorAll('.qty-minus').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const cartItem = this.closest('.cart-item-enter');
+            const itemId = cartItem.dataset.itemId;
+            console.log('Minus:', itemId);
+            changeQuantity(itemId, -1);
+        });
+    });
+    
+    // Plus Buttons
+    cartItemsContainer.querySelectorAll('.qty-plus').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const cartItem = this.closest('.cart-item-enter');
+            const itemId = cartItem.dataset.itemId;
+            console.log('Plus:', itemId);
+            changeQuantity(itemId, 1);
+        });
+    });
+    
+    // Entfernen Buttons
+    cartItemsContainer.querySelectorAll('.remove-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const cartItem = this.closest('.cart-item-enter');
+            const itemId = cartItem.dataset.itemId;
+            console.log('Entfernen:', itemId);
+            removeFromCart(itemId);
+        });
+    });
+}
+
 // ============================================
-// 🔐 CHECKOUT - CODE GENERIEREN & DISCORD NOTIFY
+// 🔐 CHECKOUT & DISCORD
 // ============================================
-window.checkout = function() {
+function checkout() {
     console.log('🛒 Checkout gestartet...');
-    console.log('Warenkorb:', cart);
     
     if (cart.length === 0) {
         alert('Warenkorb ist leer!');
@@ -459,25 +525,21 @@ window.checkout = function() {
         timestamp: new Date().toISOString()
     };
     
-    console.log('Checkout-Daten:', checkoutData);
     localStorage.setItem('checkoutData', JSON.stringify(checkoutData));
-    console.log('✅ Daten in localStorage gespeichert');
 
-    console.log('📡 Sende Discord-Nachricht...');
     sendDiscordNotification(checkoutData)
         .then(() => {
-            console.log('✅ Discord-Nachricht erfolgreich gesendet!');
             setTimeout(() => {
                 window.location.href = 'checkout.html';
             }, 1000);
         })
         .catch(error => {
-            console.error('❌ Fehler beim Senden:', error);
+            console.error('❌ Fehler:', error);
             setTimeout(() => {
                 window.location.href = 'checkout.html';
             }, 1000);
         });
-};
+}
 
 function generateRandomCode() {
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -489,16 +551,8 @@ function generateRandomCode() {
     return code;
 }
 
-// ============================================
-// 📡 DISCORD NACHRICHT SENDEN (KORRIGIERT!)
-// ============================================
 async function sendDiscordNotification(checkoutData) {
-    console.log('📡 Discord-Funktion aufgerufen');
-    console.log('Webhook URL vorhanden:', !!DISCORD_WEBHOOK_URL);
-    
-    // ✅ KORRIGIERTE BEDINGUNG - Prüft nur ob URL leer ist
     if (!DISCORD_WEBHOOK_URL || DISCORD_WEBHOOK_URL.trim() === "") {
-        console.error('❌ Discord Webhook URL ist leer!');
         throw new Error('Webhook URL nicht konfiguriert');
     }
 
@@ -506,36 +560,16 @@ async function sendDiscordNotification(checkoutData) {
         `• **${item.name}** x${item.quantity} = ${(item.price * item.quantity).toFixed(2)} €`
     ).join('\n');
 
-    console.log('Artikel-Liste:', itemsList);
-
     const embed = {
         title: "🛒 Neue Bestellung eingegangen!",
         color: 0x6366f1,
         fields: [
-            {
-                name: "🔑 Bestell-Code",
-                value: `\`${checkoutData.code}\``,
-                inline: true
-            },
-            {
-                name: "💰 Gesamtpreis",
-                value: `**${checkoutData.total.toFixed(2).replace('.', ',')} €**`,
-                inline: true
-            },
-            {
-                name: "📦 Artikel",
-                value: itemsList || "Keine Artikel",
-                inline: false
-            },
-            {
-                name: "🕐 Zeitpunkt",
-                value: new Date(checkoutData.timestamp).toLocaleString('de-DE'),
-                inline: false
-            }
+            { name: "🔑 Bestell-Code", value: `\`${checkoutData.code}\``, inline: true },
+            { name: "💰 Gesamtpreis", value: `**${checkoutData.total.toFixed(2).replace('.', ',')} €**`, inline: true },
+            { name: "📦 Artikel", value: itemsList || "Keine Artikel", inline: false },
+            { name: "🕐 Zeitpunkt", value: new Date(checkoutData.timestamp).toLocaleString('de-DE'), inline: false }
         ],
-        footer: {
-            text: "DigitalVault Shop"
-        },
+        footer: { text: "DigitalVault Shop" },
         timestamp: checkoutData.timestamp
     };
 
@@ -544,39 +578,19 @@ async function sendDiscordNotification(checkoutData) {
         embeds: [embed]
     };
 
-    console.log('📤 Sende Payload an Discord...');
-    console.log('Payload:', JSON.stringify(payload, null, 2));
-
-    try {
-        const response = await fetch(DISCORD_WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        console.log('📥 Response Status:', response.status);
-        console.log('📥 Response OK:', response.ok);
-        
-        if (response.ok) {
-            console.log('✅ Discord-Nachricht erfolgreich gesendet!');
-            return true;
-        } else {
-            const errorText = await response.text();
-            console.error('❌ Discord API Fehler:', response.status, errorText);
-            throw new Error(`Discord API Error: ${response.status}`);
-        }
-    } catch (error) {
-        console.error('❌ Netzwerk/CORS-Fehler:', error);
-        console.error('Tipp: Öffne die Seite über einen lokalen Server (z.B. python -m http.server 8000)');
-        throw error;
+    const response = await fetch(DISCORD_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+    
+    if (response.ok) {
+        return true;
+    } else {
+        throw new Error(`Discord API Error: ${response.status}`);
     }
 }
 
-// ============================================
-// 🔔 TOAST BENACHRICHTIGUNG
-// ============================================
 function showToast(message) {
     const toast = document.getElementById('toast');
     if (!toast) return;
@@ -590,3 +604,9 @@ function showToast(message) {
         toast.classList.add('translate-y-24');
     }, 2500);
 }
+
+// ============================================
+// 🌍 GLOBALE FUNKTIONEN VERFÜGBAR MACHEN
+// ============================================
+window.toggleCart = toggleCart;
+window.checkout = checkout;
