@@ -539,9 +539,10 @@ function updateCartUI() {
         cartItemDiv.dataset.itemId = item.id;
         
         cartItemDiv.innerHTML = `
-            <div class="flex gap-4">
-                <img src="${item.image}" alt="${item.name}" 
-                     class="w-20 h-20 rounded-lg object-cover border-2 border-white/10 flex-shrink-0"
+    <div class="flex gap-4 items-center">
+        <img src="${item.image}" alt="${item.name}" 
+             class="w-20 h-20 rounded-lg object-cover border-2 border-white/10 flex-shrink-0"
+             ...>
                      onerror="this.src='https://placehold.co/100x100/1a1a1a/ffffff?text=${encodeURIComponent(item.name.substring(0,3))}'">
                 
                 <div class="flex-1 min-w-0">

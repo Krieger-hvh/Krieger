@@ -336,3 +336,20 @@ button:focus, a:focus {
     font-size: 1.1rem;
     letter-spacing: 0.05em;
 }
+
+/* Warenkorb Item - Bilder zentrieren */
+.cart-item {
+    display: flex;
+    align-items: center;
+}
+
+.cart-item img {
+    align-self: center;
+}
+
+/* Flex Container für Bild und Inhalt */
+.cart-item > div:first-child {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
