@@ -471,13 +471,22 @@ function addToCart(productId) {
 }
 
 function removeFromCart(itemId) {
-    cart = cart.filter(item => item.id !== itemId);
+    // itemId immer in die richtige Type umwandeln
+    cart = cart.filter(item => {
+        // Vergleiche als Strings
+        return String(item.id) !== String(itemId);
+    });
     updateCartUI();
 }
 
 function changeQuantity(itemId, delta) {
-    const item = cart.find(item => item.id === itemId);
-    if (!item) return;
+    // itemId immer in die richtige Type umwandeln
+    const item = cart.find(item => String(item.id) === String(itemId));
+    
+    if (!item) {
+        console.error('Item nicht gefunden:', itemId);
+        return;
+    }
 
     item.quantity += delta;
     
