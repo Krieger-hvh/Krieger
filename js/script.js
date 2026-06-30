@@ -574,16 +574,20 @@ function updateCartUI() {
 }
 
 // Event Delegation für Warenkorb - EINFACH & ZUVERLÄSSIG
+// Event Delegation für Warenkorb - MIT closest()
 document.addEventListener('DOMContentLoaded', () => {
     const cartItemsContainer = document.getElementById('cart-items');
     
     if (cartItemsContainer) {
         cartItemsContainer.addEventListener('click', function(e) {
-            const target = e.target;
+            // Finde das nächste Elternelement mit data-action
+            // (wichtig wenn man auf SVG/Icons klickt!)
+            const button = e.target.closest('[data-action]');
             
-            // Prüfen ob auf einen Warenkorb-Button geklickt wurde
-            const action = target.dataset.action;
-            const itemId = target.dataset.id;
+            if (!button) return;
+            
+            const action = button.dataset.action;
+            const itemId = button.dataset.id;
             
             if (!action || !itemId) return;
             
