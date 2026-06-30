@@ -1,43 +1,217 @@
-/* Checkout-spezifische Styles */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;600;700&display=swap');
 
-.success-pulse {
-    animation: pulse-green 2s infinite;
+/* KRIEGER Schwarz/Weiß/Grau Theme */
+body {
+    background: #0a0a0a;
 }
 
-@keyframes pulse-green {
-    0%, 100% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+/* Militärisches Muster */
+.military-pattern {
+    background-image: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(255,255,255,.03) 2px,
+            rgba(255,255,255,.03) 4px
+        ),
+        repeating-linear-gradient(
+            90deg,
+            transparent,
+            transparent 2px,
+            rgba(255,255,255,.03) 2px,
+            rgba(255,255,255,.03) 4px
+        );
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 12px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-left: 1px solid rgba(255,255,255,0.1);
+}
+::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border-radius: 0;
+    border: 2px solid #0a0a0a;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #e5e5e5;
+}
+
+details > summary {
+    list-style: none;
+}
+details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Warenkorb Scrollbar */
+#cart-items::-webkit-scrollbar {
+    width: 8px;
+}
+#cart-items::-webkit-scrollbar-track {
+    background: transparent;
+}
+#cart-items::-webkit-scrollbar-thumb {
+    background: #ffffff;
+    border: 1px solid #0a0a0a;
+}
+
+/* Warenkorb Animation */
+.cart-item-enter {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
     }
-    50% {
-        box-shadow: 0 0 0 20px rgba(34, 197, 94, 0);
+    to {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-/* Code-Box Styling */
-#checkout-code {
-    background: linear-gradient(135deg, #818cf8 0%, #06b6d4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+/* Varianten Hover */
+.variant-option {
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255,255,255,0.1);
+}
+
+.variant-option:hover {
+    transform: translateX(8px);
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Produkt Karten - HERAUSSTECHEND */
+.product-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, rgba(42,42,42,0.6) 0%, rgba(26,26,26,0.8) 100%);
+    border: 2px solid rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.5s;
+}
+
+.product-card:hover::before {
+    left: 100%;
+}
+
+.product-card:hover {
+    border-color: rgba(255, 255, 255, 0.6);
+    box-shadow: 
+        0 0 0 1px rgba(255,255,255,0.1),
+        0 10px 40px rgba(0,0,0,0.5),
+        0 0 60px rgba(255,255,255,0.05);
+    transform: translateY(-8px);
+}
+
+/* Badge Styling */
+.product-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #ffffff;
+    color: #000000;
+    font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'Bebas Neue', sans-serif;
     letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    z-index: 10;
+    border: 2px solid rgba(255,255,255,0.3);
 }
 
-/* Copy Button Animation */
-#copy-btn:active {
-    transform: scale(0.98);
+/* Stock Badge */
+.stock-badge {
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border: 1px solid;
 }
 
-/* Toast Animation */
-.toast-show {
-    transform: translateY(0) !important;
+.stock-available {
+    background: rgba(255,255,255,0.1);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.3);
 }
 
-/* Fade-In Animation für Container */
-body > .relative {
-    animation: fadeInUp 0.6s ease-out;
+.stock-low {
+    background: rgba(255,255,255,0.1);
+    color: #fbbf24;
+    border-color: rgba(251,191,36,0.5);
 }
 
-@keyframes fadeInUp {
+/* Kaufen Button */
+.buy-button {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 900;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.15em;
+    font-size: 1.1rem;
+    border: 2px solid #ffffff;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.buy-button:hover {
+    background: transparent;
+    color: #ffffff;
+    box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    transform: translateY(-2px);
+}
+
+/* Entfernen Button */
+.remove-btn {
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+.remove-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.3);
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Selection Color */
+::selection {
+    background: #ffffff;
+    color: #000000;
+}
+
+/* Focus States */
+button:focus, a:focus {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+}
+
+/* Loading Animation */
+@keyframes fadeIn {
     from {
         opacity: 0;
         transform: translateY(30px);
@@ -48,53 +222,117 @@ body > .relative {
     }
 }
 
-/* Bestell-Items Animation */
-.order-item {
-    animation: slideIn 0.3s ease-out backwards;
+.category-section {
+    animation: fadeIn 0.6s ease-out;
 }
 
-.order-item:nth-child(1) { animation-delay: 0.1s; }
-.order-item:nth-child(2) { animation-delay: 0.2s; }
-.order-item:nth-child(3) { animation-delay: 0.3s; }
-.order-item:nth-child(4) { animation-delay: 0.4s; }
-.order-item:nth-child(5) { animation-delay: 0.5s; }
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+/* Kategorie Header */
+.category-header {
+    position: relative;
+    padding: 20px 0;
+    margin-bottom: 40px;
 }
 
-/* Varianten Modal Animation */
-.variant-option {
+.category-header::before,
+.category-header::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+.category-header::before {
+    left: 0;
+}
+
+.category-header::after {
+    right: 0;
+}
+
+/* Produkt Bild Container */
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 2px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.3);
+}
+
+.product-image-container img {
+    transition: all 0.5s ease;
+}
+
+.product-card:hover .product-image-container img {
+    transform: scale(1.1);
+    filter: brightness(1.1);
+}
+
+/* Preis Anzeige */
+.price-tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+}
+
+.price-label {
+    font-size: 0.875rem;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+/* Warenkorb Item */
+.cart-item {
+    background: rgba(42,42,42,0.4);
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 16px;
     transition: all 0.3s ease;
 }
 
-.variant-option:hover {
-    transform: translateX(8px);
-    background: rgba(99, 102, 241, 0.1);
+.cart-item:hover {
+    border-color: rgba(255,255,255,0.3);
+    background: rgba(42,42,42,0.6);
 }
 
-/* Scrollbar für Modal */
-#modal-variants::-webkit-scrollbar {
-    width: 8px;
+/* Quantity Controls */
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    padding: 4px;
 }
 
-#modal-variants::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+.qty-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: #ffffff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
     border-radius: 4px;
 }
 
-#modal-variants::-webkit-scrollbar-thumb {
-    background: rgba(99, 102, 241, 0.5);
-    border-radius: 4px;
+.qty-btn:hover {
+    background: rgba(255,255,255,0.2);
 }
 
-#modal-variants::-webkit-scrollbar-thumb:hover {
-    background: rgba(99, 102, 241, 0.8);
+.qty-display {
+    font-weight: 700;
+    min-width: 32px;
+    text-align: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
 }
