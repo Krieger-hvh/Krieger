@@ -5,8 +5,8 @@ const products = {
     "Streaming Accounts": [
         { id: 1, name: "Netflix Lifetime", price: 5.99, image: "images/netflix.jpg", stock: "Auf Lager", badge: null },
         { id: 2, name: "Disney+ Premium", price: 3.99, image: "images/disney+.jpg", stock: "Auf Lager", badge: null },
-        { id: 4, name: "Paramount+ USA", price: 2.99, image: "images/paramount.jpg", stock: "Auf Lager", badge: null },
-        { id: 877, name: "Paramount+ EU", price: 2.99, image: "images/paramount.jpg", stock: "Auf Lager", badge: null },
+        { id: 4, name: "Paramount+ USA", price: 2.99, image: "images/paramount.png", stock: "Auf Lager", badge: null },
+        { id: 877, name: "Paramount+ EU", price: 2.99, image: "images/paramount.png", stock: "Auf Lager", badge: null },
         { id: 5, name: "Crunchyroll", price: 4.99, image: "images/crunchroll.jpg", stock: "Auf Lager", badge: null },
         { id: 6, name: "HBO Max", price: 4.99, image: "images/hbo.jpg", stock: "Nur noch 5", badge: null }
     ],
@@ -232,13 +232,14 @@ const products = {
 // ============================================
 // 🔐 DISCORD WEBHOOK
 // ============================================
-const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1513950453140815984/-Ev1AQvMw4SrWDfCoBmHCo9y4SQ1IC5N1sM12LhsQQ7FfwymK2RyDtyq4r9I3kdOtzec";
+const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1521820477168025652/QENM4rdm6PoX9qmmkE69SoU0HudD-NXYZh7Rw2s17yYw2-wFdOT_-AxNoSbfvnw1h9LX";
+const PING_ROLE_ID = "1521822795305193473";
 
 // ============================================
 // 🛒 WARENKORB STATE
 // ============================================
 let cart = [];
-
+let isCheckingOut = false; // Spam-Schutz Flag
 // ============================================
 // 🎨 INITIALISIERUNG
 // ============================================
@@ -653,9 +654,48 @@ function attachCartEventListeners() {
 // 🔐 CHECKOUT & DISCORD
 // ============================================
 function checkout() {
+    // Spam-Schutz: Verhindere Mehrfachklicks
+    if (isCheckingOut) {
+        console.log('⚠️ Checkout läuft bereits...');
+        return;
+    }
+    
+    const checkoutBtn = document.getElementById('checkout-btn');
+    
+    // Flag setzen
+    isCheckingOut = true;
+    
+    // Button visuell deaktivieren
+    if (checkoutBtn) {
+        checkoutBtn.disabled = true;
+        checkoutBtn.style.cursor = 'not-allowed';
+        checkoutBtn.style.pointerEvents = 'none'; // Verhindert ALLE Klicks
+        checkoutBtn.innerHTML = `
+            <svg class="animate-spin h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            WIRD VERARBEITET...
+        `;
+    }
+    
     console.log('🛒 Checkout gestartet...');
     
     if (cart.length === 0) {
+        // Flag zurücksetzen
+        isCheckingOut = false;
+        
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.cursor = 'pointer';
+            checkoutBtn.style.pointerEvents = 'auto';
+            checkoutBtn.innerHTML = `
+                ZUR KASSE
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            `;
+        }
         alert('Warenkorb ist leer!');
         return;
     }
@@ -674,15 +714,33 @@ function checkout() {
 
     sendDiscordNotification(checkoutData)
         .then(() => {
+            console.log('✅ Discord-Nachricht gesendet!');
             setTimeout(() => {
                 window.location.href = 'checkout.html';
-            }, 1000);
+            }, 500); // Schnelle Weiterleitung
         })
         .catch(error => {
             console.error('❌ Fehler:', error);
+            
+            // Flag nur bei Fehler zurücksetzen
+            isCheckingOut = false;
+            
+            if (checkoutBtn) {
+                checkoutBtn.disabled = false;
+                checkoutBtn.style.cursor = 'pointer';
+                checkoutBtn.style.pointerEvents = 'auto';
+                checkoutBtn.innerHTML = `
+                    ZUR KASSE
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                `;
+            }
+            
+            // Trotzdem weiterleiten
             setTimeout(() => {
                 window.location.href = 'checkout.html';
-            }, 1000);
+            }, 500);
         });
 }
 
@@ -719,9 +777,9 @@ async function sendDiscordNotification(checkoutData) {
     };
 
     const payload = {
-        content: "🔔 **Neue Bestellung!** Bitte Discord-Ticket öffnen und Code einlösen.",
-        embeds: [embed]
-    };
+    content: `@everyone 🔔 **Neue Bestellung!** Bitte Ticket öffnen.`,
+    embeds: [embed]
+};
 
     const response = await fetch(DISCORD_WEBHOOK_URL, {
         method: 'POST',
